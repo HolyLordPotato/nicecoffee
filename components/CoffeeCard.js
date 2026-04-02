@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { AppContext } from '../App';
+import { AppContext } from '../AppContext';
 
 export default function CoffeeCard({ item }) {
   const { theme, addToCart } = useContext(AppContext);

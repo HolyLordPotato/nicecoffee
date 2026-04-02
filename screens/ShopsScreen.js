@@ -1,11 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, TextInput } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { AppContext } from "../App";
+import { AppContext } from "../AppContext";
 import Header from "../components/Header";
 import axios from "axios";
-
-const API_URL = "http://localhost:3000";
+import { API_URL } from "../config";
 
 export default function ShopsScreen({ navigation }) {
   const { theme, selectedShop, setSelectedShop } = useContext(AppContext);
@@ -54,7 +53,7 @@ export default function ShopsScreen({ navigation }) {
             {selectedShop && (
                 <View style={[
                     s.badge,
-                    { backgroundColor: theme.surfece, borderColor: theme.accent },
+                    { backgroundColor: theme.surface, borderColor: theme.accent },
                 ]}
             >
                 <Feather name="check-circle" size={14} color={theme.accent} />
@@ -123,7 +122,7 @@ export default function ShopsScreen({ navigation }) {
 
 const s = StyleSheet.create({
     wrap: { flex: 1 },
-    searchBox: {
+    search: {
         flexDirection: "row",
         alignItems: "center",
         marginHorizontal: 16,
@@ -145,9 +144,9 @@ const s = StyleSheet.create({
         borderWidth: 1,
         gap: 8,
     },
-    badgeTxt: {flex: 1, fontSize: 13, fontWeight: "600" },
+    badgeText: {flex: 1, fontSize: 13, fontWeight: "600" },
     list: { padding: 16, gap: 14, paddingBottom: 24 },
-    card: { borderRadius: 18, overflow: "hidden", position: "absolute" },
+    card: { borderRadius: 18, overflow: "hidden", minHeight: 220 },
     overlay: {
         ...StyleSheet.absoluteFillObject,
         backgroundColor: "rgba(0,0,0,0.42)",

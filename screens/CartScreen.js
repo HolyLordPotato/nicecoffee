@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   View,
   FlatList,
@@ -9,15 +9,15 @@ import {
 } from 'react-native';
 import axios from "axios";
 import { Feather } from '@expo/vector-icons';
-import { AppContext } from '../App';
+import { AppContext } from '../AppContext';
 import Header from '../components/Header';
 import { useNavigation } from "@react-navigation/native";
-
-const API_URL = "http://localhost:3000";
+import { API_URL } from '../config';
 
 export default function CartScreen() {
   const { theme, cart, removeFromCart } = useContext(AppContext);
   const navigation = useNavigation();
+  const [isPlacing, setIsPlacing] = useState(false);
 
   const total = cart.reduce(
     (sum, c) => sum + parseFloat(c.price) * c.qty,
@@ -25,9 +25,15 @@ export default function CartScreen() {
   );
 
   const placeOrder = async () => {
+    if (cart.length === 0) {
+      alert('Add items to your cart before placing an order.');
+      return;
+    }
+
+    setIsPlacing(true);
     try {
       const res = await axios.post(`${API_URL}/orders`, {
-        userId: 1, // replace with logged-in user
+        userId: 1, // replace with logged-in user id when auth is added
         cart,
       });
       const orderId = res.data.orderId;
@@ -35,6 +41,8 @@ export default function CartScreen() {
     } catch (err) {
       console.error(err);
       alert("Order failed. Please try again.");
+    } finally {
+      setIsPlacing(false);
     }
   };
 
@@ -96,29 +104,10 @@ export default function CartScreen() {
             </Text>
             <TouchableOpacity
               style={[s.btn, { backgroundColor: theme.accent }]}
-            >
-              <Text style={s.btnTxt}>Place Order</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{ flex: 1, backgroundColor: theme.background }}>
-            {/* ...cart list... */}
-            <TouchableOpacity
-              style={{
-                backgroundColor: theme.accent,
-                padding: 12,
-                margin: 16,
-                borderRadius: 6,
-                alignItems: "center",
-              }}
-              onPress={() => navigation.navigate("Payment")}
-            >
-              <Text style={{ color: "#fff", fontWeight: "bold" }}>Proceed to Payment</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[s.btn, { backgroundColor: theme.accent }]}
               onPress={placeOrder}
+              disabled={cart.length === 0 || isPlacing}
             >
-              <Text style={s.btnTxt}>Place Order</Text>
+              <Text style={s.btnTxt}>{isPlacing ? 'Placing order...' : 'Place Order'}</Text>
             </TouchableOpacity>
           </View>
         </>
@@ -157,6 +146,11 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  orderFooter: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 24,
   },
   total: { fontSize: 16, fontWeight: '600' },
   btn: {

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { AppContext } from "../App";
+import { AppContext } from "../AppContext";
 
 export default function Header({ title }) {
   const { theme, isDark, setIsDark } = useContext(AppContext);

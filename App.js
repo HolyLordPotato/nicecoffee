@@ -1,19 +1,15 @@
-import React, { useState, createContext, useContext } from "react";
+import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import axios from 'axios';
 import { Feather } from "@expo/vector-icons";
 import { light, dark } from "./theme";
+import { AppContext } from "./AppContext";
 import ShopsScreen from "./screens/ShopsScreen";
 import MenuScreen from "./screens/MenuScreen";
 import CartScreen from "./screens/CartScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import PaymentScreen from "./screens/PaymentScreen";
 
-const API_URL = 'http://localhost:3000';
-
-
-export const AppContext = createContext();
 const Tab = createBottomTabNavigator();
 
 export default function App() {
@@ -48,6 +44,7 @@ export default function App() {
         isDark,
         setIsDark,
         cart,
+        setCart,
         addToCart,
         removeFromCart,
         selectedShop,

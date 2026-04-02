@@ -1,22 +1,27 @@
 import React, { useContext } from "react";
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from "react-native";
 import axios from "axios";
-import { AppContext } from "../App";
-
-const API_URL = "http://localhost:3000";
+import { AppContext } from "../AppContext";
+import { API_URL } from "../config";
 
 export default function PaymentScreen({ route }) {
-  const { cart, theme } = useContext(AppContext);
-  const { orderId } = route.params;
+  const { cart, theme, removeFromCart, setCart } = useContext(AppContext);
+  const { orderId } = route.params || {};
 
   const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
   const handlePayment = async () => {
+    if (!orderId) {
+      alert('No order found. Please place an order first.');
+      return;
+    }
+
     try {
       await axios.post(`${API_URL}/payment`, {
         orderId,
         status: "paid",
       });
+      setCart([]);
       alert("Payment successful!");
     } catch (err) {
       console.error(err);
@@ -25,7 +30,7 @@ export default function PaymentScreen({ route }) {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.bg }]}>
       <Text style={[styles.title, { color: theme.text }]}>Checkout</Text>
 
       <FlatList

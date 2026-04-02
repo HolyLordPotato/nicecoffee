@@ -1,12 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
 import { View, FlatList, Text, TouchableOpacity, TextInput, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { AppContext } from "../App";
+import { AppContext } from "../AppContext";
 import Header from "../components/Header";
 import CoffeeCard from "../components/CoffeeCard";
 import axios from "axios";
-
-const API_URL = "http://localhost:3000";
+import { API_URL } from "../config";
 
 const CATEGORIES = ["All", "Espresso", "Latte", "Cold Brew", "Tea"];
 
